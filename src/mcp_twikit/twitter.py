@@ -131,8 +131,7 @@ async def post_tweet(
         # Handle tags by converting to mentions
         if tags:
             mentions = ' '.join(f"@{tag.lstrip('@')}" for tag in tags)
-            text = f"{text}
-{mentions}"
+            text = f"{text} {mentions}"
         
         # Upload media if provided
         media_ids = []
@@ -208,6 +207,8 @@ def convert_tweets_to_markdown(tweets) -> str:
         result.append(tweet.text)
         if tweet.media:
             for media in tweet.media:
-                result.append(f"![media]({media.url})")
+                url = media.get("media_url_https")
+                if url:
+                    result.append(f"![media]({url})")
         result.append("---")
     return "\n".join(result)
